@@ -1,0 +1,4 @@
+<item
+    android:id="@+id/navigation_automation"
+    android:icon="@drawable/ic_automation"
+    android:title="Automation" />
