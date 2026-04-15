@@ -1,4 +1,4 @@
-package datong.tiangong.com
+package io.shubham0204.smollmandroid.automation
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
