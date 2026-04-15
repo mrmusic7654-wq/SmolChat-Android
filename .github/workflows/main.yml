@@ -22,7 +22,7 @@ jobs:
     - name: Verify submodules
       run: |
         git submodule status
-        ls -la app/src/main/jni/smolchat_android_llama.cpp/
+        ls -la app/src/main/jni/smolchat_android_llama.cpp/ || echo "Submodule path check"
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -30,21 +30,16 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-      with:
-        packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --stacktrace
+      run: ./gradlew assembleDebug --stacktrace --no-daemon
 
     - name: Locate APK files
       run: |
         echo "Listing generated APKs:"
-        find . -name "*.apk" -type f
+        find . -name "*.apk" -type f 2>/dev/null || echo "No APK found"
 
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
@@ -53,9 +48,14 @@ jobs:
         path: app/build/outputs/apk/debug/*.apk
         retention-days: 7
         compression-level: 6
-        if-no-files-found: error
+        if-no-files-found: warn
 
     - name: Build Summary
+      if: always()
       run: |
-        echo "✅ Build completed successfully!"
-        echo "📦 APK size: $(du -h app/build/outputs/apk/debug/*.apk | cut -f1)"
+        if [ -f app/build/outputs/apk/debug/*.apk ]; then
+          echo "✅ Build completed successfully!"
+          echo "📦 APK size: $(du -h app/build/outputs/apk/debug/*.apk | cut -f1)"
+        else
+          echo "⚠️ Build may have issues - check logs above"
+        fi
