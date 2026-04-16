@@ -2,23 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     
     <item
-        android:id="@+id/navigation_chats"
-        android:icon="@drawable/ic_chat"
-        android:title="Chats" />
-    
-    <item
-        android:id="@+id/navigation_tasks"
-        android:icon="@drawable/ic_task"
-        android:title="Tasks" />
-    
-    <item
-        android:id="@+id/navigation_models"
-        android:icon="@drawable/ic_model"
-        android:title="Models" />
+        android:id="@+id/navigation_chat"
+        android:icon="@android:drawable/ic_dialog_email"
+        android:title="Chat" />
     
     <item
         android:id="@+id/navigation_automation"
-        android:icon="@drawable/ic_automation"
+        android:icon="@android:drawable/ic_menu_manage"
         android:title="Automation" />
     
 </menu>
