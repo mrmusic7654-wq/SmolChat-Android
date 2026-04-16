@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="io.shubham0204.smollmandroid">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,6 +23,9 @@
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="true" />
+
+    <!-- Force override moonshine-voice minSdk requirement -->
+    <uses-sdk tools:overrideLibrary="ai.moonshine.voice" />
 
     <application
         android:name=".SmolChatApplication"
