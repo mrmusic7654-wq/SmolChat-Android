@@ -2,30 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Permissions -->
+    <uses-sdk tools:overrideLibrary="ai.moonshine.voice" />
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.VIBRATE" />
     
     <!-- Aura AI Automation Permissions -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
-    
-    <!-- Features -->
-    <uses-feature
-        android:name="android.hardware.microphone"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.touchscreen"
-        android:required="true" />
-
-    <!-- Force override moonshine-voice minSdk requirement -->
-    <uses-sdk tools:overrideLibrary="ai.moonshine.voice" />
 
     <application
         android:name=".SmolChatApplication"
@@ -34,120 +18,42 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SmolChat"
-        android:usesCleartextTraffic="true"
+        android:theme="@style/Theme.SmolLMAndroid"
         tools:targetApi="31">
-
-        <!-- Main Activity -->
+        
+        <activity
+            android:name=".ui.screens.manage_asr.ManageASRActivity"
+            android:exported="false"
+            android:label="@string/title_activity_app_settings"
+            android:theme="@style/Theme.SmolLMAndroid" />
+            
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.SmolChat"
-            android:windowSoftInputMode="adjustResize">
+            android:theme="@style/Theme.SmolLMAndroid">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- App Settings Activity -->
+        
         <activity
-            android:name=".AppSettingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- Chat Settings Activity -->
-        <activity
-            android:name=".chat_settings.ChatSettingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- Model List Activity -->
-        <activity
-            android:name=".models.ModelListActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- Download Model Activity -->
-        <activity
-            android:name=".models.DownloadModelActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- HF Browse Activity -->
-        <activity
-            android:name=".models.HFBrowseActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- HF Model Details Activity -->
-        <activity
-            android:name=".models.HFModelDetailsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- Task Create Activity -->
-        <activity
-            android:name=".tasks.TaskCreateActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- Task Edit Activity -->
-        <activity
-            android:name=".tasks.TaskEditActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- Tasks Manage Activity -->
-        <activity
-            android:name=".tasks.TasksManageActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- File Picker Activity -->
-        <activity
-            android:name=".models.FilePickerActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- Model Import Activity -->
-        <activity
-            android:name=".models.ModelImportActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- Model Import Summary Activity -->
-        <activity
-            android:name=".models.ModelImportSummaryActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- Benchmark Activity -->
-        <activity
-            android:name=".benchmark.BenchmarkActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- Chat Folder Selection Activity -->
-        <activity
-            android:name=".chat_settings.ChatFolderSelectionActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SmolChat" />
-
-        <!-- Speech Recognition Service -->
-        <service
-            android:name=".services.SpeechRecognitionService"
-            android:exported="false"
-            android:foregroundServiceType="microphone" />
-
-        <!-- Download Service -->
-        <service
-            android:name=".models.DownloadService"
-            android:exported="false"
-            android:foregroundServiceType="dataSync" />
-
+            android:name=".ui.screens.chat.ChatActivity"
+            android:exported="true"
+            android:label="💬 LLM">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".ui.screens.model_download.DownloadModelActivity" />
+        <activity android:name=".ui.screens.manage_tasks.ManageTasksActivity" />
+        
         <!-- Aura AI Accessibility Service -->
         <service
             android:name=".automation.AuraAccessibilityService"
@@ -160,25 +66,7 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
         </service>
-
-        <!-- File Provider -->
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-
-        <!-- WorkManager Provider -->
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            android:exported="false"
-            tools:node="merge" />
-
+        
     </application>
 
 </manifest>
